@@ -13,6 +13,6 @@ public class Mover : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		rigidBody.AddForce (new Vector3 (0, 0, -1));
+		rigidBody.AddForce (new Vector3 (0, 0, 2));
 	}
 }
