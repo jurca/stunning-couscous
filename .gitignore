@@ -1,4 +1,9 @@
 Library/
 Assets/ProCore/
 Assets/ProCore.meta
+Temp/
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp.csproj
+Tunnel Shooter.sln
+Tunnel Shooter.userprefs
 
