@@ -7,6 +7,7 @@ public class TrajectoryFollower : MonoBehaviour
 	public Trajectory trajectory;
 	public float speed;
 	public bool reverse;
+	public bool loop;
 	public bool disableOnCollision;
 
 	private int nextTrajectoryPointIndex;
@@ -19,6 +20,12 @@ public class TrajectoryFollower : MonoBehaviour
 
 	void Awake ()
 	{
+		if (trajectory.points.Length == 0) {
+			Debug.LogError ("The trajectory must contain at least one point");
+			enabled = false;
+			return;
+		}
+
 		nextPosition = transform.position;
 		nextDirection = transform.rotation;
 
@@ -72,8 +79,12 @@ public class TrajectoryFollower : MonoBehaviour
 	{
 		nextTrajectoryPointIndex += reverse ? -1 : 1;
 		if (nextTrajectoryPointIndex < 0 || nextTrajectoryPointIndex >= trajectory.points.Length) {
-			enabled = false; // we have nothing to do anymore
-			return false;
+			if (loop) {
+				nextTrajectoryPointIndex = nextTrajectoryPointIndex == -1 ? trajectory.points.Length - 1 : 0;
+			} else {
+				enabled = false; // we have nothing to do anymore
+				return false;
+			}
 		}
 
 		lastPosition = nextPosition;
@@ -81,7 +92,7 @@ public class TrajectoryFollower : MonoBehaviour
 		nextPosition = trajectory.points [nextTrajectoryPointIndex].position;
 		nextDirection = trajectory.points [nextTrajectoryPointIndex].direction;
 		if (reverse) {
-			// TODO: this doesn't work well, hand-crafted points might be neccessary
+			// TODO: this doesn't work well, hand-crafted points might be neccessary. maybe remove altogether?
 			nextDirection = Quaternion.Euler (-nextDirection.eulerAngles);
 		}
 
